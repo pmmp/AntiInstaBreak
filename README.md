@@ -1,4 +1,5 @@
 ## AntiInstaBreak
+[![Poggit](https://poggit.pmmp.io/ci.shield/dktapps/AntiInstaBreak/AntiInstaBreak)](https://poggit.pmmp.io/ci/dktapps/AntiInstaBreak/AntiInstaBreak)
 
 PocketMine-MP plugin implementing anti-cheat for instabreak.
 
