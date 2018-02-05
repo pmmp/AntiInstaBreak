@@ -27,8 +27,8 @@ class Main extends PluginBase implements Listener{
 		if(!$event->getInstaBreak()){
 			do{
 				$player = $event->getPlayer();
-				if(!isset($this->breakTimes[$uuid = $event->getPlayer()->getRawUniqueId()])){
-					$this->getLogger()->debug("Player " . $event->getPlayer()->getName() . " tried to break a block without a start-break action");
+				if(!isset($this->breakTimes[$uuid = $player->getRawUniqueId()])){
+					$this->getLogger()->debug("Player " . $player->getName() . " tried to break a block without a start-break action");
 					$event->setCancelled();
 					break;
 				}
@@ -51,7 +51,7 @@ class Main extends PluginBase implements Listener{
 				$actualTime = ceil(microtime(true) * 20) - $this->breakTimes[$uuid = $player->getRawUniqueId()];
 
 				if($actualTime < $expectedTime){
-					$this->getLogger()->debug("Player " . $event->getPlayer()->getName() . " tried to break a block too fast, expected $expectedTime ticks, got $actualTime ticks");
+					$this->getLogger()->debug("Player " . $player->getName() . " tried to break a block too fast, expected $expectedTime ticks, got $actualTime ticks");
 					$event->setCancelled();
 					break;
 				}
