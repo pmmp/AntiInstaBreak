@@ -1,7 +1,7 @@
 name: AntiInstaBreak
 main: dktapps\AntiInstaBreak\Main
 version: 0.1.0
-api: 3.0.0-ALPHA11
+api: [3.0.0-ALPHA11, 3.0.0-ALPHA12]
 load: POSTWORLD
 author: dktapps
 description: Times block-breaking in survival modes to prevent cheating.
