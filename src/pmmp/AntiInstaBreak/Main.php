@@ -1,6 +1,6 @@
 <?php
 
-namespace dktapps\AntiInstaBreak;
+namespace pmmp\AntiInstaBreak;
 
 use pocketmine\entity\Effect;
 use pocketmine\event\block\BlockBreakEvent;
