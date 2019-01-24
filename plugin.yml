@@ -1,7 +1,7 @@
 name: AntiInstaBreak
 main: pmmp\AntiInstaBreak\Main
 version: 0.2.0
-api: [3.0.0-ALPHA11, 3.0.0-ALPHA12, 3.0.0]
+api: [3.0.0]
 load: POSTWORLD
 author: PMMP Team
 description: Times block-breaking in survival modes to prevent cheating.
