@@ -2,7 +2,7 @@
 
 namespace pmmp\AntiInstaBreak;
 
-use pocketmine\entity\Effect;
+use pocketmine\entity\effect\Effect;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
@@ -38,12 +38,12 @@ class Main extends PluginBase implements Listener{
 
 				$expectedTime = ceil($target->getBreakTime($item) * 20);
 
-				if($player->hasEffect(Effect::HASTE)){
-					$expectedTime *= 1 - (0.2 * $player->getEffect(Effect::HASTE)->getEffectLevel());
+				if($player->hasEffect(Effect::HASTE())){
+					$expectedTime *= 1 - (0.2 * $player->getEffect(Effect::HASTE())->getEffectLevel());
 				}
 
-				if($player->hasEffect(Effect::MINING_FATIGUE)){
-					$expectedTime *= 1 + (0.3 * $player->getEffect(Effect::MINING_FATIGUE)->getEffectLevel());
+				if($player->hasEffect(Effect::MINING_FATIGUE())){
+					$expectedTime *= 1 + (0.3 * $player->getEffect(Effect::MINING_FATIGUE())->getEffectLevel());
 				}
 
 				$expectedTime -= 1; //1 tick compensation
