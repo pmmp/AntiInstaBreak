@@ -38,12 +38,12 @@ class Main extends PluginBase implements Listener{
 
 				$expectedTime = ceil($target->getBreakTime($item) * 20);
 
-				if($player->hasEffect(Effect::HASTE)){
-					$expectedTime *= 1 - (0.2 * $player->getEffect(Effect::HASTE)->getEffectLevel());
+				if(($haste = $player->getEffect(Effect::HASTE)) !== null){
+					$expectedTime *= 1 - (0.2 * $haste->getEffectLevel());
 				}
 
-				if($player->hasEffect(Effect::MINING_FATIGUE)){
-					$expectedTime *= 1 + (0.3 * $player->getEffect(Effect::MINING_FATIGUE)->getEffectLevel());
+				if(($miningFatigue = $player->getEffect(Effect::MINING_FATIGUE)) !== null){
+					$expectedTime *= 1 + (0.3 * $miningFatigue->getEffectLevel());
 				}
 
 				$expectedTime -= 1; //1 tick compensation
