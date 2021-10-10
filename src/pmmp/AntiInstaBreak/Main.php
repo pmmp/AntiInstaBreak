@@ -2,7 +2,7 @@
 
 namespace pmmp\AntiInstaBreak;
 
-use pocketmine\entity\effect\Effect;
+use pocketmine\entity\effect\VanillaEffects;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
@@ -19,7 +19,7 @@ class Main extends PluginBase implements Listener{
 
 	public function onPlayerInteract(PlayerInteractEvent $event) : void{
 		if($event->getAction() === PlayerInteractEvent::LEFT_CLICK_BLOCK){
-			$this->breakTimes[$event->getPlayer()->getRawUniqueId()] = floor(microtime(true) * 20);
+			$this->breakTimes[$event->getPlayer()->getUniqueId()->getBytes()] = floor(microtime(true) * 20);
 		}
 	}
 
@@ -27,32 +27,32 @@ class Main extends PluginBase implements Listener{
 		if(!$event->getInstaBreak()){
 			do{
 				$player = $event->getPlayer();
-				if(!isset($this->breakTimes[$uuid = $player->getRawUniqueId()])){
+				if(!isset($this->breakTimes[$uuid = $player->getUniqueId()->getBytes()])){
 					$this->getLogger()->debug("Player " . $player->getName() . " tried to break a block without a start-break action");
-					$event->setCancelled();
+					$event->cancel();
 					break;
 				}
 
 				$target = $event->getBlock();
 				$item = $event->getItem();
 
-				$expectedTime = ceil($target->getBreakTime($item) * 20);
+				$expectedTime = ceil($target->getBreakInfo()->getBreakTime($item) * 20);
 
-				if(($haste = $player->hasEffect(Effect::HASTE())) !== null){
+				if(($haste = $player->getEffects()->get(VanillaEffects::HASTE())) !== null){
 					$expectedTime *= 1 - (0.2 * $haste->getEffectLevel());
 				}
 
-				if(($miningFatigue = $player->getEffect(Effect::MINING_FATIGUE())) !== null){
+				if(($miningFatigue = $player->getEffects()->get(VanillaEffects::MINING_FATIGUE())) !== null){
 					$expectedTime *= 1 + (0.3 * $miningFatigue->getEffectLevel());
 				}
 
 				$expectedTime -= 1; //1 tick compensation
 
-				$actualTime = ceil(microtime(true) * 20) - $this->breakTimes[$uuid = $player->getRawUniqueId()];
+				$actualTime = ceil(microtime(true) * 20) - $this->breakTimes[$uuid];
 
 				if($actualTime < $expectedTime){
 					$this->getLogger()->debug("Player " . $player->getName() . " tried to break a block too fast, expected $expectedTime ticks, got $actualTime ticks");
-					$event->setCancelled();
+					$event->cancel();
 					break;
 				}
 
@@ -62,6 +62,6 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function onPlayerQuit(PlayerQuitEvent $event) : void{
-		unset($this->breakTimes[$event->getPlayer()->getRawUniqueId()]);
+		unset($this->breakTimes[$event->getPlayer()->getUniqueId()->getBytes()]);
 	}
 }
