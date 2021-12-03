@@ -216,5 +216,5 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 
-/vendor/
-/phpstan-composer.lock
+/phpstan/vendor/
+/phpstan/composer.lock
