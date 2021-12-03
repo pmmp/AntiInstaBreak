@@ -25,39 +25,37 @@ class Main extends PluginBase implements Listener{
 
 	public function onBlockBreak(BlockBreakEvent $event) : void{
 		if(!$event->getInstaBreak()){
-			do{
-				$player = $event->getPlayer();
-				if(!isset($this->breakTimes[$uuid = $player->getUniqueId()->getBytes()])){
-					$this->getLogger()->debug("Player " . $player->getName() . " tried to break a block without a start-break action");
-					$event->cancel();
-					break;
-				}
+			$player = $event->getPlayer();
+			if(!isset($this->breakTimes[$uuid = $player->getUniqueId()->getBytes()])){
+				$this->getLogger()->debug("Player " . $player->getName() . " tried to break a block without a start-break action");
+				$event->cancel();
+				return;
+			}
 
-				$target = $event->getBlock();
-				$item = $event->getItem();
+			$target = $event->getBlock();
+			$item = $event->getItem();
 
-				$expectedTime = ceil($target->getBreakInfo()->getBreakTime($item) * 20);
+			$expectedTime = ceil($target->getBreakInfo()->getBreakTime($item) * 20);
 
-				if(($haste = $player->getEffects()->get(VanillaEffects::HASTE())) !== null){
-					$expectedTime *= 1 - (0.2 * $haste->getEffectLevel());
-				}
+			if(($haste = $player->getEffects()->get(VanillaEffects::HASTE())) !== null){
+				$expectedTime *= 1 - (0.2 * $haste->getEffectLevel());
+			}
 
-				if(($miningFatigue = $player->getEffects()->get(VanillaEffects::MINING_FATIGUE())) !== null){
-					$expectedTime *= 1 + (0.3 * $miningFatigue->getEffectLevel());
-				}
+			if(($miningFatigue = $player->getEffects()->get(VanillaEffects::MINING_FATIGUE())) !== null){
+				$expectedTime *= 1 + (0.3 * $miningFatigue->getEffectLevel());
+			}
 
-				$expectedTime -= 1; //1 tick compensation
+			$expectedTime -= 1; //1 tick compensation
 
-				$actualTime = ceil(microtime(true) * 20) - $this->breakTimes[$uuid];
+			$actualTime = ceil(microtime(true) * 20) - $this->breakTimes[$uuid];
 
-				if($actualTime < $expectedTime){
-					$this->getLogger()->debug("Player " . $player->getName() . " tried to break a block too fast, expected $expectedTime ticks, got $actualTime ticks");
-					$event->cancel();
-					break;
-				}
+			if($actualTime < $expectedTime){
+				$this->getLogger()->debug("Player " . $player->getName() . " tried to break a block too fast, expected $expectedTime ticks, got $actualTime ticks");
+				$event->cancel();
+				return;
+			}
 
-				unset($this->breakTimes[$uuid]);
-			}while(false);
+			unset($this->breakTimes[$uuid]);
 		}
 	}
 
