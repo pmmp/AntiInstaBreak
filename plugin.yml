@@ -1,6 +1,6 @@
 name: AntiInstaBreak
 main: pmmp\AntiInstaBreak\Main
-version: 0.3.0+dev
+version: 1.0.0
 api: [4.0.0]
 load: POSTWORLD
 author: PMMP Team
