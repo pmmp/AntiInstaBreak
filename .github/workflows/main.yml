@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: PHPStan analysis
+    name: PHPStan analysis (PM ${{ matrix.constraint }}${{ matrix.pm }}, PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -15,16 +15,26 @@ jobs:
         php:
           - "8.1"
           - "8.2"
+        pm:
+          - 4.0.0
+          - 5.0.0
+        constraint:
+          - "" #exact version, e.g. 4.0.0, 5.0.0
+          - "^" #most recent patch version, e.g. 4.21.1, 5.0.0
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Get PocketMine-MP major version
+        id: major
+        run: echo PM_VERSION_MAJOR=$(${{ matrix.pm }} | cut -d. -f1) >> $GITHUB_OUTPUT
 
       - name: Setup PHP
         uses: pmmp/setup-php-action@2.0.0
         with:
           php-version: ${{ matrix.php }}
           install-path: "./bin"
-          pm-version-major: 5
+          pm-version-major: ${{ steps.major.outputs.PM_VERSION_MAJOR }}
 
       - name: Restore Composer package cache
         id: composer-cache
@@ -36,7 +46,7 @@ jobs:
 
       - name: Install PHPStan Composer dependencies
         working-directory: ./phpstan
-        run: composer install --prefer-dist --no-interaction --ignore-platform-reqs
+        run: composer update --with pocketmine/pocketmine-mp:${{ matrix.constraint }}${{ matrix.pm }} --prefer-dist --no-interaction
 
       - name: Run PHPStan
         working-directory: ./phpstan
