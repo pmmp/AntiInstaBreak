@@ -27,7 +27,7 @@ jobs:
 
       - name: Get PocketMine-MP major version
         id: major
-        run: echo PM_VERSION_MAJOR=$(${{ matrix.pm }} | cut -d. -f1) >> $GITHUB_OUTPUT
+        run: echo PM_VERSION_MAJOR=$(echo ${{ matrix.pm }} | cut -d. -f1) >> $GITHUB_OUTPUT
 
       - name: Setup PHP
         uses: pmmp/setup-php-action@2.0.0
