@@ -22,6 +22,9 @@ jobs:
         constraint:
           - "" #exact version, e.g. 4.0.0, 5.0.0
           - "^" #most recent patch version, e.g. 4.21.1, 5.0.0
+        exclude:
+          - php: "8.3"
+            pm: 4.0.0
 
     steps:
       - uses: actions/checkout@v3
